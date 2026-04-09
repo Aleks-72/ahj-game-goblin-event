@@ -5,7 +5,7 @@ export default class GameMenu {
         this.buttonRestart = document.querySelector("button")
     }
 
-    generateMenu(score = 0, error = 0, status) {
+    generateMenu(score = 0, error = 0) {
         let menu  = document.createElement("div")
         menu.classList.add('menu')
         let buttonRestart = document.createElement("button")
@@ -23,14 +23,7 @@ export default class GameMenu {
         let statusDisplay = document.createElement('div');
         statusDisplay.classList.add('info-item');
         statusDisplay.classList.add('status');
-        if (status = "win") {
-            statusDisplay.textContent = `Статус: Победа!`
-        } else if ("lose") {
-            statusDisplay.textContent = `Статус: Поражение!`
-        } else (
-            statusDisplay.textContent = `Статус: Игра начата`
-        )
-        
+        statusDisplay.textContent = `Статус: Игра начата`
         stats.append(scoreDisplay)
         stats.append(errorDisplay)
         stats.append(statusDisplay)
@@ -45,7 +38,7 @@ export default class GameMenu {
         let errorDisplay = document.querySelector('.error')
         errorDisplay.textContent = `Ошибок: ${error}`
         let statusDisplay = document.querySelector('.status')
-        statusDisplay.textContent = `Статус: ${status==="active" ? "Игра начата" : status==="win"? "Вы победили" : "Вы проиграли"}`
+        statusDisplay.textContent = `Статус: ${status==="active" ? "Игра начата" : status==="win"? "Победа!" : "Поражение!"}`
     }
 
     buttonRestartListener(restartHandler) {
