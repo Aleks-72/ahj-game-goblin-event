@@ -5,7 +5,7 @@ export default class GameMenu {
         this.buttonRestart = document.querySelector("button")
     }
 
-    generateMenu(score = 0, error = 0) {
+    generateMenu(score = 0, error = 0, status) {
         let menu  = document.createElement("div")
         menu.classList.add('menu')
         let buttonRestart = document.createElement("button")
@@ -20,25 +20,35 @@ export default class GameMenu {
         errorDisplay.classList.add('info-item');
         errorDisplay.classList.add('error');
         errorDisplay.textContent = `Ошибок: ${error}`
+        let statusDisplay = document.createElement('div');
+        statusDisplay.classList.add('info-item');
+        statusDisplay.classList.add('status');
+        if (status = "win") {
+            statusDisplay.textContent = `Статус: Победа!`
+        } else if ("lose") {
+            statusDisplay.textContent = `Статус: Поражение!`
+        } else (
+            statusDisplay.textContent = `Статус: Игра начата`
+        )
+        
         stats.append(scoreDisplay)
         stats.append(errorDisplay)
+        stats.append(statusDisplay)
         menu.append(buttonRestart)
         menu.append(stats)
         this._element.append(menu)
     }
 
-    updateMenu(score, error) {
+    updateMenu(score, error, status) {
         let scoreDisplay = document.querySelector('.score')
         scoreDisplay.textContent = `Счет: ${score}`
         let errorDisplay = document.querySelector('.error')
         errorDisplay.textContent = `Ошибок: ${error}`
+        let statusDisplay = document.querySelector('.status')
+        statusDisplay.textContent = `Статус: ${status==="active" ? "Игра начата" : status==="win"? "Вы победили" : "Вы проиграли"}`
     }
 
     buttonRestartListener(restartHandler) {
-        console.log(this.buttonRestart)
-        // this.restartCallback = () => {
-        //     restartHandler();
-        // };
         this.buttonRestart.addEventListener('click', () => restartHandler())
     }
 }

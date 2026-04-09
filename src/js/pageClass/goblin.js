@@ -8,6 +8,7 @@ export default class Goblin {
     createGoblin() {
         let goblin = document.createElement("img")
         goblin.src = image
+        goblin.alt = "гоблин"
         goblin.classList.add("goblin")
         this._element.append(goblin)
     }

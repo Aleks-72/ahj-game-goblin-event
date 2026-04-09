@@ -2,30 +2,23 @@ import Goblin from "./pageClass/goblin";
 
 export default class Game {
     constructor(gameMenu) {
+        this._max_score = 16;
+        this._max_error = 5;
         this.score = 0;
         this.error = 0;
         this.fieldGame = document.querySelector(".game-field")
-        this.gameMenu = gameMenu //new GameMenu(document.querySelector("main"))
+        this.gameMenu = gameMenu
+        this.goblinClick = false
         this.goblinGenerate = null
         this.handleClick = (event) => {
             const isGoblinHit = event.target.closest('.goblin');
-            console.log(this.gameMenu)
             if (isGoblinHit) {
                 this.score += 1;
-                console.log('Попал! Счет: ' + this.score);
-                this.gameMenu.updateMenu(this.score, this.error)
-                isGoblinHit.remove(); 
-            } else {
-                this.error += 1;
-                console.log('Промах! Ошибок: ' + this.error);
-                this.gameMenu.updateMenu(this.score, this.error)
+                this.goblinClick = true
             }
-            if (this.score === 16) {
-                alert("You win!")
-                this.stopGame()
-            } else if (this.error === 5) {
-                alert("You lose!")
-                this.stopGame()
+            if (this.score === this._max_score) {
+                this.status = "win"
+                this.stopGame("Win")
             }
         }
         
@@ -35,11 +28,8 @@ export default class Game {
         this.stopGame()
         this.score = 0;
         this.error = 0;
-        this.gameMenu.updateMenu(this.score, this.error)
         this.status = "active";
-        // let fieldBoxes = (document.querySelectorAll(".field-box"));
-        // let oldCount;
-        // let count;
+        this.gameMenu.updateMenu(this.score, this.error, this.status)
         this.fieldGame.addEventListener('click', this.handleClick)
         this.goblinGenerateStart()
     }
@@ -53,13 +43,22 @@ export default class Game {
             if (oldGoblin) {
                 oldGoblin.remove()
             }
-            count = Math.floor(Math.random()*(16));
+            if (this.goblinClick === false) {
+                this.error +=1
+                if (this.error === this._max_error) {
+                    this.status= "lose"
+                    this.stopGame("Lose")
+            }
+            }
+            count = Math.floor(Math.random()*(fieldBoxes.length));
             while (count === oldCount) {
-                count = Math.floor(Math.random()*(16));
+                count = Math.floor(Math.random()*(fieldBoxes.length));
             };
             let goblin = new Goblin(fieldBoxes[count]);
             goblin.createGoblin()
             oldCount = count;
+            this.goblinClick=false
+            this.gameMenu.updateMenu(this.score, this.error, this.status)
             if (this.status === "end") {
                 clearInterval(this.goblinGenerate)
                 this.goblinGenerate = null
@@ -68,11 +67,10 @@ export default class Game {
     }
 
     stopGame() {
-        this.status = "end"
+        this.gameMenu.updateMenu(this.score, this.error, this.status)
         clearInterval(this.goblinGenerate)
         this.goblinGenerate = null
         this.fieldGame.removeEventListener('click', this.handleClick)
-        console.log("Game is stopping!")
     }
 }
 
