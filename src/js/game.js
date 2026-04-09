@@ -14,6 +14,7 @@ export default class Game {
             const isGoblinHit = event.target.closest('.goblin');
             if (isGoblinHit) {
                 this.score += 1;
+                isGoblinHit.remove();
                 this.goblinClick = true
             }
             if (this.score === this._max_score) {
